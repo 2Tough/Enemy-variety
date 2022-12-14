@@ -43,20 +43,30 @@ document.addEventListener("DOMContentLoaded", function() {
   class Enemy {
     constructor(game) {
       this.game = game;
-      console.log(this.game)
-      this.x = this.game.width;
-      this.y = Math.random() * this.game.height;
-      this.width = 100;
-      this.height = 100;
       this.markedForDeletion = false
+      this.frameX = 0
+      this.maxFrame = 5
+      this.frameInterval = 100
+      this.frameTimer = 0
     }
     update(deltaTime) {
       this.x -= this.vx * deltaTime;
       // remove enemies
       if(this.x < 0 - this.width) this.markedForDeletion = true
+      //
+      if(this.frameTimer > this.frameInterval) {
+        if(this.frameX < this.maxFrame) this.frameX++
+        else this.frameX = 0
+        this.frameTimer = 0
+      } else {
+        this.frameTimer += deltaTime
+
+      }
+
     }
     draw(ctx) {
-      ctx.drawImage(this.image, 0, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height);
+
+      ctx.drawImage(this.image, this.frameX * this.spriteWidth, 0, this.spriteWidth, this.spriteHeight, this.x, this.y, this.width, this.height);
     }
   }
 
@@ -93,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function() {
       this.y += Math.sin(this.angle) * this.curve
       this.angle += 0.05
     }
-    draw(){
+    draw(ctx){
       ctx.save()
       ctx.globalAlpha = 0.5
       super.draw(ctx)
@@ -112,11 +122,20 @@ document.addEventListener("DOMContentLoaded", function() {
       this.y = 0 - this.height;
       this.image = spider;
       this.vx = 0
-      this.vy = 1
+      this.vy = Math.random() * 0.1 + 0.1
+      this.maxLength = Math.random() * this.game.height
     }
     update(deltaTime){
       super.update(deltaTime)
-      this.y += this.vy
+      this.y += this.vy *deltaTime
+      if(this.y > this.maxLength) this.vy *= -1
+    }
+    draw(ctx){
+      ctx.beginPath()
+      ctx.moveTo(this.x + this.width/2, 0)
+      ctx.lineTo(this.x + this.width/2, this.y +10)
+      ctx.stroke()
+      super.draw(ctx)
     }
   }
 
