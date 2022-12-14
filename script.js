@@ -1,4 +1,4 @@
-document.addEventListener("load", function () {
+document.addEventListener("DOMContentLoaded", function() {
   const canvas = document.getElementById("canvas1");
   const ctx = canvas.getContext("2d");
   canvas.width = 500;
@@ -10,9 +10,18 @@ document.addEventListener("load", function () {
       this.width = width;
       this.height = height;
       this.enemies = [];
-      this.#addNewEnemy();
+      this.enemyInterval = 20
+      this.enemyTimer = 0
     }
     update() {
+      if(this.enemyTimer > this.enemyInterval){
+        this.#addNewEnemy()
+        this.enemyTimer = 0
+        console.log(this.enemies)
+      } else {
+        this.enemyTimer++
+      }
+      // this.#addNewEnemy();
       this.enemies.forEach((object) => object.update());
     }
     draw() {
@@ -30,7 +39,7 @@ document.addEventListener("load", function () {
       this.x = this.game.width;
       this.y = Math.random() * this.game.height;
       this.width = 100;
-      this.height = 200;
+      this.height = 100;
     }
     update() {
       this.x--;
@@ -49,7 +58,7 @@ document.addEventListener("load", function () {
     game.update();
     game.draw();
     requestAnimationFrame(animate);
-  }
+  };
   animate(0);
 });
 
