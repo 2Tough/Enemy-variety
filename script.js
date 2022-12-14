@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function() {
       this.enemies.forEach((object) => object.draw(this.ctx));
     }
     #addNewEnemy() {
-      this.enemies.push(new Enemy(this));
+      this.enemies.push(new Worm(this));
     }
   }
 
@@ -50,6 +50,17 @@ document.addEventListener("DOMContentLoaded", function() {
     }
     draw(ctx) {
       ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+  }
+
+  class Worm extends Enemy {
+    constructor(game){
+      super(game)
+      this.x = this.game.width;
+      this.y = Math.random() * this.game.height;
+      this.width = 100;
+      this.height = 100;
+      this.image = worm;
     }
   }
 
